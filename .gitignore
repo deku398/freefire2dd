@@ -105,3 +105,32 @@ loop();
 
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Free Fire 2D</title>
+<style>
+body { margin:0; overflow:hidden; background:#111; }
+canvas { display:block; }
+#info {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-family: Arial;
+}
+</style>
+</head>
+<body>
+
+<div id="info">Toque na tela para atirar</div>
+<canvas id="game"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight
+
+index.html
