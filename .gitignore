@@ -1,22 +1,107 @@
-### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
-.vscode/
-#Cache folder
-.alcache/
-#Symbols folder
-.alpackages/
-#Snapshots folder
-.snapshots/
-#Testing Output folder
-.output/
-#Extension App-file
-*.app
-#Rapid Application Development File
-rad.json
-#Translation Base-file
-*.g.xlf
-#License-file
-*.flf
-#Test results file
-TestResults.xml
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Free Fire 2D</title>
+<style>
+body { margin:0; overflow:hidden; background:#111; }
+canvas { display:block; }
+#info {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-family: Arial;
+}
+</style>
+</head>
+<body>
+
+<div id="info">Toque na tela para atirar</div>
+<canvas id="game"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const mapSize = 2000;
+
+// Jogador
+const player = {
+  x: 1000,
+  y: 1000,
+  speed: 4
+};
+
+// Inimigos
+const enemies = [];
+for (let i = 0; i < 50; i++) {
+  enemies.push({
+    x: Math.random()*mapSize,
+    y: Math.random()*mapSize
+  });
+}
+
+const bullets = [];
+
+// Atirar
+window.addEventListener("click", shoot);
+window.addEventListener("touchstart", shoot);
+
+function shoot() {
+  bullets.push({
+    x: player.x,
+    y: player.y,
+    dx: 10,
+    dy: 0
+  });
+}
+
+// Atualizar
+function update() {
+  enemies.forEach(e => {
+    const dx = player.x - e.x;
+    const dy = player.y - e.y;
+    const d = Math.hypot(dx, dy);
+    e.x += dx/d;
+    e.y += dy/d;
+  });
+
+  bullets.forEach(b => b.x += b.dx);
+}
+
+// Desenhar
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const camX = player.x - canvas.width/2;
+  const camY = player.y - canvas.height/2;
+
+  ctx.fillStyle = "#333";
+  ctx.fillRect(-camX, -camY, mapSize, mapSize);
+
+  ctx.fillStyle = "blue";
+  ctx.fillRect(player.x-camX, player.y-camY, 30, 30);
+
+  ctx.fillStyle = "red";
+  enemies.forEach(e =>
+    ctx.fillRect(e.x-camX, e.y-camY, 25, 25)
+  );
+
+  ctx.fillStyle = "yellow";
+  bullets.forEach(b =>
+    ctx.fillRect(b.x-camX, b.y-camY, 8, 4)
+  );
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+
+</body>
+</html>
